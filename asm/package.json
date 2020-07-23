@@ -9,9 +9,14 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "assemblyscript": "^0.14.3"
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "assemblyscript": "^0.14.3",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8"
   }
 }

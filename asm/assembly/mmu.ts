@@ -5,10 +5,15 @@ export default class MMU {
   private mem: StaticArray<u8> = new StaticArray<u8>(MEM_SIZE);
 
   read<T>(address: usize): T {
-    return load<T>(changetype<usize>(this.mem) + address);
+    return load<T>(this.getMemoryPtr() + address);
   }
 
   write<T>(address: usize, value: T): void {
-    store<T>(changetype<usize>(this.mem) + address, value);
+    store<T>(this.getMemoryPtr() + address, value);
+  }
+
+  @inline()
+  getMemoryPtr(): usize {
+    return changetype<usize>(this.mem);
   }
 }

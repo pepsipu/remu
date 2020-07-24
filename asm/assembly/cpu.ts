@@ -8,6 +8,14 @@ class CPU {
   public mmu: MMU = new MMU();
 }
 
-export function loadProgram(): void {
+const cpu: CPU = new CPU();
 
+export function loadProgram(program: string): void {
+  for (let i = 0; i < program.length; i += 1) {
+    cpu.mmu.write<u8>(i, program.charCodeAt(i));
+  }
+}
+
+export function read(address: usize): u8 {
+  return cpu.mmu.read<u8>(address);
 }

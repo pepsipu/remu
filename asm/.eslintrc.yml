@@ -3,6 +3,6 @@ extends:
 parserOptions:
   project: './asm/assembly/tsconfig.json'
 rules:
-  # dev rule
   import/prefer-default-export:
     - off
+

@@ -1,26 +1,36 @@
 import React from 'react';
-import { ResultObject } from '@assemblyscript/loader';
 import './App.css';
 
-export default class App extends React.Component<any, any> {
-  private wasmFns: WasmExports;
+const PROGRAM = '\x41';
 
-  constructor(props: { wasm: ResultObject }) {
+export default class App extends React.Component<any, any> {
+  private readonly wasmExports: WasmExports;
+
+  private readonly wasm: any;
+
+  constructor(props: { wasm: any }) {
     super(props);
+    const { wasm } = props;
+    this.wasm = wasm;
     // @ts-ignore because ts wont know the exports at compile time
-    const wasmFns: WasmExports = props.wasm.instance.exports;
-    this.wasmFns = wasmFns;
+    this.wasmExports = wasm.exports;
+    this.wasmExports.loadProgram(PROGRAM);
   }
 
   render() {
     return (
       <p>
-        epic
+        {this.wasmExports.read(0)}
       </p>
     );
   }
 }
 
 interface WasmExports {
-  loadProgram: () => void
+  Uint8ArrayId: { value: number },
+  loadProgram: (program: any) => void,
+  read: (address: number) => number,
+  __alloc: (size: number, id: number) => number,
+  __retain: (ptr: number) => number,
+  __release: (ptr: number) => void,
 }

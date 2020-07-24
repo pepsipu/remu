@@ -1,7 +1,8 @@
 {
   "extends": "assemblyscript/std/assembly.json",
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "../node_modules/assemblyscript/std/assembly/rt/index.d.ts"
   ],
   "moduleResolution": "node"
 }

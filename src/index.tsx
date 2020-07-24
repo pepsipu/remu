@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { instantiateStreaming } from '@assemblyscript/loader';
 import './index.css';
 import App from './App';
 
-instantiateStreaming(fetch('./remu.wasm')).then((wasm) => {
+const { AsBind } = require('as-bind');
+
+AsBind.instantiate(fetch('./remu.wasm')).then((wasm: any) => {
   ReactDOM.render(
     <App wasm={wasm} />,
     document.getElementById('root'),

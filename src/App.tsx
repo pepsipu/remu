@@ -2,19 +2,25 @@ import React from 'react';
 import { ResultObject } from '@assemblyscript/loader';
 import './App.css';
 
-function App(props: { wasm: ResultObject }) {
-  const { wasm } = props;
-  // @ts-ignore because ts wont know the exports at compile time
-  const wasmFns: WasmExports = wasm.instance.exports;
-  return (
-    <p>
-      {wasmFns.add(1, 2)}
-    </p>
-  );
+export default class App extends React.Component<any, any> {
+  private wasmFns: WasmExports;
+
+  constructor(props: { wasm: ResultObject }) {
+    super(props);
+    // @ts-ignore because ts wont know the exports at compile time
+    const wasmFns: WasmExports = props.wasm.instance.exports;
+    this.wasmFns = wasmFns;
+  }
+
+  render() {
+    return (
+      <p>
+        epic
+      </p>
+    );
+  }
 }
 
 interface WasmExports {
-  add: (a: number, b: number) => number
+  loadProgram: () => void
 }
-
-export default App;

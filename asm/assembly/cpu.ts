@@ -7,13 +7,15 @@ class CPU {
 
   public mmu: MMU = new MMU();
 
-  public step = () => {
+  public step(): usize {
     const instruction = this.mmu.read<u16>(this.pc);
-  };
+    const instructionSize = this.getInstructionSize(instruction);
+    return instructionSize;
+  }
 
   // refer to page 6 of the riscv spec v2.2 to find the instruction size diagram
   // returns how many bytes the instruction is
-  public getInstructionSize = (instruction: u16): usize => {
+  public getInstructionSize: (instruction: u16) => usize = (instruction) => {
     if ((instruction & 0x3) === 0x3) {
       if ((instruction & 0x1f) === 0x1f) {
         if ((instruction & 0x3f) !== 0x1f) {
@@ -38,10 +40,18 @@ const cpu: CPU = new CPU();
 
 export function loadProgram(program: string): void {
   for (let i = 0; i < program.length; i += 1) {
-    cpu.mmu.write<u8>(i, program.charCodeAt(i));
+    cpu.mmu.write<u8>(i, program.charCodeAt(i) as u8);
   }
 }
 
-export function read(address: usize): u8 {
-  return cpu.mmu.read<u8>(address);
+export function debug(): u32 {
+  // return cpu.mmu.read<u64>(30);
+  const before = Date.now();
+  let res = cpu.mmu.read<u64>(30);
+  while (res !== 0xffffffff) {
+    res += 1;
+    cpu.mmu.write<u64>(30, res);
+  }
+  const after = Date.now();
+  return (after - before) as u32;
 }

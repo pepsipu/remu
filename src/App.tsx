@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-const PROGRAM = '\x41';
+const PROGRAM = '\x93\x00\xa0\x00';
 
 export default class App extends React.Component<any, any> {
   private readonly wasmExports: WasmExports;
@@ -20,7 +20,7 @@ export default class App extends React.Component<any, any> {
   render() {
     return (
       <p>
-        {this.wasmExports.read(0)}
+        {this.wasmExports.debug()}
       </p>
     );
   }
@@ -29,7 +29,7 @@ export default class App extends React.Component<any, any> {
 interface WasmExports {
   Uint8ArrayId: { value: number },
   loadProgram: (program: any) => void,
-  read: (address: number) => number,
+  debug: () => number,
   __alloc: (size: number, id: number) => number,
   __retain: (ptr: number) => number,
   __release: (ptr: number) => void,

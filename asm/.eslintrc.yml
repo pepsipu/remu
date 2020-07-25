@@ -5,4 +5,5 @@ parserOptions:
 rules:
   import/prefer-default-export:
     - off
-
+  no-bitwise:
+    - off

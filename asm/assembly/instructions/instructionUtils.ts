@@ -18,3 +18,12 @@ export function signExtend(num: usize, len: usize): isize {
   // positive
   return num;
 }
+
+// @ts-ignore
+@inline()
+export function extractIType(instruction: u32): Array<u32> {
+  const rd = extractBits(instruction, 7, 11);
+  const rs1 = extractBits(instruction, 15, 19);
+  const imm = extractBits(instruction, 20, 32);
+  return [rd, rs1, imm];
+}

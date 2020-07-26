@@ -18,6 +18,7 @@ export class CPU {
     const size = this.getInstructionSize(instruction);
     const instructionType = this.getInstructionOpType(instruction, size);
     executeInstruction(instruction, instructionType, this);
+    this.pc += size;
   }
 
   public getInstructionOpType: (instruction: u32, size: usize) => OpTypes = (instruction, size) => {
@@ -62,7 +63,8 @@ export function loadProgram(program: string): void {
   }
 }
 
-export function debug(): u32 {
+export function debug(): usize {
   cpu.step();
-  return sizeof<usize>() * 8 - 1;
+  cpu.step();
+  return cpu.regs[1];
 }

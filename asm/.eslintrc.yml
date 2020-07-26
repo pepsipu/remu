@@ -7,3 +7,8 @@ rules:
     - off
   no-bitwise:
     - off
+  import/no-cycle:
+    - off
+  no-param-reassign:
+    - error
+    - props: false

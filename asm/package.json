@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "asbuild:untouched": "asc ./node_modules/as-bind/lib/assembly/as-bind.ts assembly/cpu.ts --target debug --runtime full --debug --sourceMap",
+    "asbuild:untouched": "asc ./node_modules/as-bind/lib/assembly/as-bind.ts assembly/cpu.ts --target debug --runtime full -O3 --debug --sourceMap",
     "asbuild:optimized": "asc assembly/cpu.ts --target release",
     "asbuild": "npm run asbuild:untouched && cp build/untouched.wasm ../public/remu.wasm"
   },

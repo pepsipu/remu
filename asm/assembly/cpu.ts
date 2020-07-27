@@ -18,7 +18,7 @@ export class CPU {
         break;
       }
       default:
-        abort('bad size');
+        abort('bad size!!');
     }
     this.pc += size;
   }
@@ -54,8 +54,14 @@ export function loadProgram(program: string): void {
   }
 }
 
-export function debug(): usize {
-  cpu.step();
-  cpu.step();
-  return cpu.regs[1];
+/* eslint-disable no-inner-declarations */
+export namespace debug {
+  export function step(): void {
+    cpu.step();
+  }
+
+  export function readRegister(idx: i32): u32 {
+    return cpu.regs[idx] as u32;
+  }
 }
+/* eslint-enable no-inner-declarations */

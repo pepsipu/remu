@@ -5,5 +5,7 @@ parserOptions:
 rules:
   no-underscore-dangle:
     - off
-  "@typescript-eslint/naming-convention":
+  "react/jsx-one-expression-per-line":
+    - off
+  no-bitwise:
     - off

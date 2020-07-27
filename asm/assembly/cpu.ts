@@ -1,10 +1,5 @@
 import MMU from './mmu';
-import { executeInstruction } from './instructions/rv32i';
-
-export enum OpTypes {
-  Op = 0b01100,
-  OpImm = 0b00100,
-}
+import { executeRV32I, getRV32IOpType } from './instructions/rv32i';
 
 export class CPU {
   public pc: usize = 0;
@@ -16,25 +11,21 @@ export class CPU {
   public step(): void {
     const instruction = this.mmu.read<u32>(this.pc);
     const size = this.getInstructionSize(instruction);
-    const instructionType = this.getInstructionOpType(instruction, size);
-    executeInstruction(instruction, instructionType, this);
+    switch (size) {
+      case 4: {
+        const instructionType = getRV32IOpType(instruction, size);
+        executeRV32I(instruction, instructionType, this);
+        break;
+      }
+      default:
+        abort('bad size');
+    }
     this.pc += size;
   }
 
-  public getInstructionOpType: (instruction: u32, size: usize) => OpTypes = (instruction, size) => {
-    switch (size as u32) {
-      // ie. instruction[1:0] = 11
-      case 4:
-        return (instruction & 0b1111100) >> 2;
-      default:
-        abort('could not determine op type');
-        return 0;
-    }
-  };
-
   // refer to page 6 of the riscv spec v2.2 to find the instruction size diagram
   // returns how many bytes the instruction is
-  public getInstructionSize: (instruction: u32) => usize = (instruction) => {
+  public getInstructionSize: (instruction: u32) => u32 = (instruction) => {
     if ((instruction & 0x3) === 0x3) {
       if ((instruction & 0x1f) === 0x1f) {
         if ((instruction & 0x3f) !== 0x1f) {

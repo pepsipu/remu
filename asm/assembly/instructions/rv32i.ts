@@ -11,6 +11,7 @@ enum OpImmInstruction {
 
 export enum OpTypes {
   Lui = 0b01101,
+  Auipc = 0b0010111,
   Op = 0b01100,
   OpImm = 0b00100,
 }
@@ -31,6 +32,12 @@ function executeLui(instruction: u32, cpu: CPU): void {
   const rd = extractBits(instruction, 7, 11) as u32;
   const imm = extractBits(instruction, 12, 32) as u32;
   cpu.regs[rd] = imm << 12;
+}
+
+function executeAuipc(instruction: u32, cpu: CPU): void {
+  const rd = extractBits(instruction, 7, 11) as u32;
+  const imm = extractBits(instruction, 12, 32) as u32;
+  cpu.regs[rd] = (imm << 12) + cpu.pc;
 }
 
 function executeOpImm(instruction: u32, cpu: CPU): void {
@@ -60,6 +67,9 @@ export function executeRV32I(instruction: u32, instructionType: OpTypes, cpu: CP
       break;
     case OpTypes.Lui:
       executeLui(instruction, cpu);
+      break;
+    case OpTypes.Auipc:
+      executeAuipc(instruction, cpu);
       break;
     default:
       abort('unhandled optype');

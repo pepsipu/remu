@@ -34,6 +34,9 @@ export default class App extends React.Component<any, any> {
         </button>
         <hr />
         {[...Array(32)].map((_, i) => {
+          // this is needed so we convert the register to an unsigned integer. otherwise,
+          // this would have been significantly easier
+          // btw, u cant map a uint32 arr to an element so use weird Array(32) hack
           this.registers[i] = this.wasmExports.debug.readRegister(i);
           return (
             <>

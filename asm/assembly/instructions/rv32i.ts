@@ -1,18 +1,13 @@
 import { CPU } from '../cpu';
-import { extractBits, signExtend } from './instructionUtils';
-
-enum OpImmInstruction {
-  Addi = 0b000,
-  Slti = 0b010,
-  Sltiu = 0b011,
-  Xori = 0b100,
-  Ori = 0b110,
-}
+import { executeOpImm } from './rv32i/opimm';
+import { executeLui } from './rv32i/lui';
+import { executeAuipc } from './rv32i/auipc';
+import { executeJal } from './rv32i/jal';
 
 export enum OpTypes {
   Lui = 0b01101,
   Auipc = 0b0010111,
-  Op = 0b01100,
+  Jal = 0b1101111,
   OpImm = 0b00100,
 }
 
@@ -27,39 +22,6 @@ export function getRV32IOpType(instruction: u32, size: u32): OpTypes {
   }
 }
 
-function executeLui(instruction: u32, cpu: CPU): void {
-  // extract U-type fields
-  const rd = extractBits(instruction, 7, 11) as u32;
-  const imm = extractBits(instruction, 12, 32) as u32;
-  cpu.regs[rd] = imm << 12;
-}
-
-function executeAuipc(instruction: u32, cpu: CPU): void {
-  const rd = extractBits(instruction, 7, 11) as u32;
-  const imm = extractBits(instruction, 12, 32) as u32;
-  cpu.regs[rd] = (imm << 12) + cpu.pc;
-}
-
-function executeOpImm(instruction: u32, cpu: CPU): void {
-  // extract I-type fields
-  const rd = extractBits(instruction, 7, 11) as u32;
-  const rs1 = extractBits(instruction, 15, 19) as u32;
-  const imm = extractBits(instruction, 20, 32) as u32;
-  // no writes to x0
-  if (!rd) return;
-  // get fn bits
-  switch (extractBits(instruction, 12, 14) as u32) {
-    case OpImmInstruction.Addi:
-      cpu.regs[rd] += cpu.regs[rs1] + signExtend(imm, 11);
-      break;
-    case OpImmInstruction.Slti:
-      cpu.regs[rd] = +((cpu.regs[rs1] as isize) < signExtend(imm, 11));
-      break;
-    default:
-      abort('unhandled op-imm instruction');
-  }
-}
-
 export function executeRV32I(instruction: u32, instructionType: OpTypes, cpu: CPU): void {
   switch (instructionType) {
     case OpTypes.OpImm:
@@ -70,6 +32,9 @@ export function executeRV32I(instruction: u32, instructionType: OpTypes, cpu: CP
       break;
     case OpTypes.Auipc:
       executeAuipc(instruction, cpu);
+      break;
+    case OpTypes.Jal:
+      executeJal(instruction, cpu);
       break;
     default:
       abort('unhandled optype');

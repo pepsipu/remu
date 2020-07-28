@@ -18,3 +18,8 @@ export function signExtend(num: usize, len: usize): isize {
   // positive
   return num;
 }
+
+export function jTypeImm(instruction: usize): u32 {
+  const res = 0;
+  return res;
+}

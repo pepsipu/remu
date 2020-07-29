@@ -3,6 +3,7 @@ import { executeOpImm } from './rv32i/opimm';
 import { executeLui } from './rv32i/lui';
 import { executeAuipc } from './rv32i/auipc';
 import { executeJal } from './rv32i/jal';
+import { executeJalr } from './rv32i/jalr';
 
 export enum OpTypes {
   Lui = 0b01101,
@@ -36,6 +37,9 @@ export function executeRV32I(instruction: u32, instructionType: OpTypes, cpu: CP
       break;
     case OpTypes.Jal:
       executeJal(instruction, cpu);
+      break;
+    case OpTypes.Jalr:
+      executeJalr(instruction, cpu);
       break;
     default:
       abort('unhandled optype');

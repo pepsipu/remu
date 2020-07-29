@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-const PROGRAM = '\x93\x00\x10\x00\x6f\xf0\xdf\xff';
+const PROGRAM = '\x93\x00\x10\x00\xe7\x01\xc0\xff';
 
 export default class App extends React.Component<any, any> {
   private readonly wasmExports: WasmExports;

@@ -6,8 +6,8 @@ import { executeJal } from './rv32i/jal';
 
 export enum OpTypes {
   Lui = 0b01101,
-  Auipc = 0b0010111,
-  Jal = 0b1101111,
+  Auipc = 0b00101,
+  Jal = 0b11011,
   OpImm = 0b00100,
 }
 

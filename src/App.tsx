@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-const PROGRAM = '\x6f\x00\x80\x00\x13\x00\x00\x00\x6f\xf0\x9f\xff';
+const PROGRAM = '\x93\x00\x10\x00\x6f\xf0\xdf\xff';
 
 export default class App extends React.Component<any, any> {
   private readonly wasmExports: WasmExports;
@@ -17,10 +17,12 @@ export default class App extends React.Component<any, any> {
     // @ts-ignore because ts wont know the exports at compile time
     this.wasmExports = wasm.exports;
     this.wasmExports.loadProgram(PROGRAM);
-    this.registers = new Uint32Array(32);
+    // 33rd slot for pc
+    this.registers = new Uint32Array(33);
   }
 
   render() {
+    this.registers[32] = this.wasmExports.debug.readPc();
     return (
       <>
         <button
@@ -32,6 +34,8 @@ export default class App extends React.Component<any, any> {
         >
           step
         </button>
+        <hr />
+        <span>pc: 0x{this.registers[32].toString(16).padStart(8, '0')}</span>
         <hr />
         {[...Array(32)].map((_, i) => {
           // this is needed so we convert the register to an unsigned integer. otherwise,
@@ -58,6 +62,7 @@ interface WasmExports {
   debug: {
     step: () => void,
     readRegister: (idx: number) => number,
+    readPc: () => number,
   },
   __alloc: (size: number, id: number) => number,
   __retain: (ptr: number) => number,

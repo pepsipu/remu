@@ -4,17 +4,17 @@ const MEM_SIZE: i32 = 134217728;
 export default class MMU {
   private mem: StaticArray<u8> = new StaticArray<u8>(MEM_SIZE);
 
-  @inline()
+  @inline
   read<T>(address: usize): T {
     return load<T>(this.getMemoryPtr() + address);
   }
 
-  @inline()
+  @inline
   write<T>(address: usize, value: T): void {
     store<T>(this.getMemoryPtr() + address, value);
   }
 
-  @inline()
+  @inline
   getMemoryPtr(): usize {
     return changetype<usize>(this.mem);
   }

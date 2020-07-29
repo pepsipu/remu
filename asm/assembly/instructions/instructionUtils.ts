@@ -1,11 +1,11 @@
 // @ts-ignore because decorators are valid here
-@inline()
+@inline
 export function extractBits(num: usize, start: usize, amount: u32): u32 {
   return (((1 << amount) - 1) & (num >> start) as u32);
 }
 
 // @ts-ignore because decorators are valid here
-@inline()
+@inline
 export function extractBit(num: usize, bitPos: usize): u32 {
   return ((num & (1 << bitPos)) >> bitPos) as u32;
 }
@@ -18,6 +18,8 @@ export function signExtend(num: usize, len: usize): isize {
   // positive
   return num;
 }
+
+// TODO: inline optype operations
 
 export namespace jType {
   export const imm = (instruction: usize): isize => {
@@ -37,6 +39,7 @@ export namespace uType {
 }
 
 export namespace iType {
+  // @ts-ignore
   export const imm = (instruction: usize): usize => extractBits(instruction, 20, 12);
   export const simm = (instruction: usize): isize => signExtend(iType.imm(instruction), 11);
   export const rd = (instruction: usize): u32 => extractBits(instruction, 7, 5);

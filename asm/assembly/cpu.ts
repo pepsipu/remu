@@ -9,8 +9,9 @@ export class CPU {
   public mmu: MMU = new MMU();
 
   constructor() {
-    // setup x0
-    this.regs[0] = 0;
+    for (let i = 0; i < 32; i += 1) {
+      this.regs[i] = 0;
+    }
   }
 
   public step(): void {
@@ -63,6 +64,8 @@ export function loadProgram(program: string): void {
   }
 }
 
+// unfortunately cannot export arrow functions in the debug namespace bc they will be treated
+// as function ptrs and will be uncallable.
 /* eslint-disable no-inner-declarations */
 export namespace debug {
   export function step(): void {

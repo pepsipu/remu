@@ -1,5 +1,5 @@
 import { CPU } from '../../cpu';
-import { extractBits, signExtend } from '../instructionUtils';
+import { iType } from '../instructionUtils';
 
 enum OpImmInstruction {
   Addi = 0b000,
@@ -10,19 +10,16 @@ enum OpImmInstruction {
 }
 
 export function executeOpImm(instruction: u32, cpu: CPU): void {
-  // extract I-type fields
-  const rd = extractBits(instruction, 7, 5);
-  const rs1 = extractBits(instruction, 15, 5);
-  const imm = extractBits(instruction, 20, 12);
+  const rd = iType.rd(instruction);
+  const rs1 = iType.rs1(instruction);
   // no writes to x0
   if (!rd) return;
-  // get fn bits
-  switch (extractBits(instruction, 12, 3)) {
+  switch (iType.fn(instruction)) {
     case OpImmInstruction.Addi:
-      cpu.regs[rd] += cpu.regs[rs1] + signExtend(imm, 11);
+      cpu.regs[rd] += cpu.regs[rs1] + iType.simm(instruction);
       break;
     case OpImmInstruction.Slti:
-      cpu.regs[rd] = +((cpu.regs[rs1] as isize) < signExtend(imm, 11));
+      cpu.regs[rd] = +((cpu.regs[rs1] as isize) < iType.simm(instruction));
       break;
     default:
       abort('unhandled op-imm instruction');

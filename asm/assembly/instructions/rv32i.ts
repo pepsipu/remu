@@ -8,6 +8,7 @@ export enum OpTypes {
   Lui = 0b01101,
   Auipc = 0b00101,
   Jal = 0b11011,
+  Jalr = 0b11001,
   OpImm = 0b00100,
 }
 

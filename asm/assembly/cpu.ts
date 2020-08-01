@@ -2,7 +2,7 @@ import MMU from './mmu';
 import { executeRV32I, getRV32IOpType } from './instructions/rv32i';
 
 export class CPU {
-  public pc: usize = 0;
+  public pc: usize = 0x2000;
 
   public regs: StaticArray<usize> = new StaticArray(32);
 
@@ -60,7 +60,7 @@ const cpu: CPU = new CPU();
 
 export function loadProgram(program: string): void {
   for (let i = 0; i < program.length; i += 1) {
-    cpu.mmu.write<u8>(i, program.charCodeAt(i) as u8);
+    cpu.mmu.write<u8>(cpu.pc + i, program.charCodeAt(i) as u8);
   }
 }
 
